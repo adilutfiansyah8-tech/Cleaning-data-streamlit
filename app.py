@@ -26,15 +26,21 @@ if uploaded_file is not None:
     #ini bagian pas udh selesai di cleaning (start)
     st.subheader("Proses Cleaning")
 
-    df["nama_produk"] = df["nama_produk"].str.title()
-    df["kategori"] = df["kategori"].str.title()
-    df["tanggal"] = pd.to_datetime(df["tanggal"], dayfirst=True, errors="coerce")
-    df["qty"] = df["qty"].fillna(df["qty"].mean())
-    df["harga"] = df["harga"].fillna(df["harga"].mean())
-    df = df.dropna(subset=["nama_produk", "tanggal"])
-    df = df.reset_index(drop=True)
-    df["tanggal"] = df["tanggal"].dt.strftime("%Y-%m-%d")
+    kolom_teks = df.select_dtypes(include=['object']).columns
 
+    for col in kolom_teks:
+        df[col] = df[col].fillna("Tidak ada data!")
+        df[col] = df[col].str.strip().str.title()
+
+
+    kolom_number = df.select_dtypes(include=['number']).columns
+
+    for col in kolom_number:
+        df[col] = df[col].fillna(df[col].mean())
+
+    df = df.drop_duplicates()
+
+    
     st.success("✅ Data Berhasil dibersihkan")
 
     st.subheader("📊 Data Setelah Cleaning")
