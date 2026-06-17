@@ -69,18 +69,6 @@ if uploaded_file is not None:
     for col in kolom_number:
         df[col] = df[col].fillna(df[col].mean())
 
-
-    #ini bagian ketika file sudah selesai di cleaning (start)
-    kolom_teks = df.select_dtypes(include=['object']).columns
-    for col in kolom_teks:
-        df[col] = df[col].str.strip().str.title()
-    
-    kolom_number = df.select_dtypes(include=['number']).columns
-    for col in kolom_number:
-        df[col] = df[col].fillna(df[col].mean())
-    #ini bagian ketika file sudah selesai di cleaning (end)
-
-    
     df = df.drop_duplicates()
     df = df.dropna()
 
